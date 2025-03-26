@@ -398,3 +398,23 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Python 가상 환경 폴더
+venv/
+.env/
+
+# Python 캐시 및 컴파일된 파일
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter Notebook 체크포인트 (사용하는 경우)
+.ipynb_checkpoints/
+
+# pytest 및 기타 테스트 결과 파일
+.cache/
+.coverage
+nosetests.xml
+coverage.xml
+*.cover
