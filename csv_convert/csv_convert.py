@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-sleep = pd.DataFrame(columns = ['ID'] + list(range(1, 102)) + ['D', 'R', 'D+R', 'FS'])
+sleep = pd.DataFrame(columns = ['ID'] + list(range(1, 181)) + ['D', 'R', 'D+R', 'FS'])
 
 address = "csv_convert/data/labels"
 path = os.listdir(address) # 데이터 파일 리스트
