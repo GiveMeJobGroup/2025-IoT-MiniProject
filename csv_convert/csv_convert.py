@@ -1,7 +1,9 @@
 import os
 import pandas as pd
 
+
 sleep = pd.DataFrame(columns = ['ID'] + list(range(1, 102)) + ['D', 'R', 'D+R', 'FS', 'RT'])    # RT는 D+R과 FS 충족 시 남은 수면 시간
+
 address = "csv_convert/data/labels"
 path = os.listdir(address) # 데이터 파일 리스트
 
@@ -44,6 +46,7 @@ for i in range(31):
     else:
         sleep.loc[i, 'D+R'] = 0
 
+
     t = file['time'][len(file)-1]      # Total time(총 시간(s))
     if t/3600 >= 6:
         sleep.loc[i,'FS'] = 1
@@ -56,7 +59,8 @@ for i in range(31):
 
 
 
-print(sleep)
+
+# print(sleep)
 
 save_path = "csv_convert/sleep_data.csv"
 sleep.to_csv(save_path, index=False, encoding='utf-8')  # 한글 깨짐 방지
