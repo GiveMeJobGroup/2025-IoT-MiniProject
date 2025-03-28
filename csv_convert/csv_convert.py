@@ -1,7 +1,8 @@
 import os
 import pandas as pd
 
-sleep = pd.DataFrame(columns = ['ID'] + list(range(1, 181)) + ['D', 'R', 'D+R', 'FS'])
+
+sleep = pd.DataFrame(columns = ['ID'] + list(range(1, 102)) + ['D', 'R', 'D+R', 'FS', 'RT'])    # RT는 D+R과 FS 충족 시 남은 수면 시간
 
 address = "csv_convert/data/labels"
 path = os.listdir(address) # 데이터 파일 리스트
@@ -44,6 +45,20 @@ for i in range(31):
         sleep.loc[i, 'D+R'] = 1
     else:
         sleep.loc[i, 'D+R'] = 0
+
+
+    t = file['time'][len(file)-1]      # Total time(총 시간(s))
+    if t/3600 >= 6:
+        sleep.loc[i,'FS'] = 1
+    else:
+        sleep.loc[i, 'FS'] = 0    
+
+    fullTime = 8 * 3600     # 임시 적정수면시간 8시간 * 3600 (초로 변환)
+    if (sleep.loc[i, 'D+R'] == 1) and (sleep.loc[i,'FS'] == 1):
+        sleep.loc[i,'RT'] = fullTime - t
+
+
+
 
 # print(sleep)
 
