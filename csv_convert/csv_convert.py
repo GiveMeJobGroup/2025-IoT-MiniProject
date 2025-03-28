@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-sleep = pd.DataFrame(columns = ['ID'] + list(range(1, 181)))
+sleep = pd.DataFrame(columns = ['ID'] + list(range(1, 181)) + ['D', 'R', 'D+R', 'FS'])
 
 address = "csv_convert/data/labels"
 path = os.listdir(address) # 데이터 파일 리스트
@@ -26,5 +26,5 @@ for i in range(31):
 
 print(sleep)
 
-save_path = "csv_convert/sleep_data.csv"
-sleep.to_csv(save_path, index=False, encoding='utf-8')  # 한글 깨짐 방지
+# save_path = "csv_convert/sleep_data.csv"
+# sleep.to_csv(save_path, index=False, encoding='utf-8')  # 한글 깨짐 방지
