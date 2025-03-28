@@ -26,5 +26,5 @@ for i in range(31):
 
 print(sleep)
 
-# save_path = "csv_convert/sleep_data.csv"
-# sleep.to_csv(save_path, index=False, encoding='utf-8')  # 한글 깨짐 방지
+save_path = "csv_convert/sleep_data.csv"
+sleep.to_csv(save_path, index=False, encoding='utf-8')  # 한글 깨짐 방지
