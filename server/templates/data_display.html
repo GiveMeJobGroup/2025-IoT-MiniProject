@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실시간 데이터 조회</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        table { width: 60%; margin: 20px auto; border-collapse: collapse; }
+        th, td { border: 1px solid black; padding: 10px; }
+        th { background-color: white; }
+    </style>
+</head>
+<body>
+    <h2>수면 단계 데이터</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>D+R</th>
+                <th>FS</th>
+                <th>RT</th>
+            </tr>
+        </thead>
+        <tbody id="dataTable">
+            <tr><td colspan="4">데이터 로딩 중...</td></tr>
+        </tbody>
+    </table>
+
+    <h2>실시간 센서 데이터</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>온도 (°C)</th>
+                <th>습도 (%)</th>
+                <th>조도 (lux)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="tempData">-</td>
+                <td id="humData">-</td>
+                <td id="lightData">-</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function fetchMySQLData() {
+            $.ajax({
+                url: "/get_data",
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    let tableContent = "";
+                    tableContent = `
+                        <tr>
+                            <td>${data.ID}</td>
+                            <td>${data["D+R"]}</td>
+                            <td>${data.FS}</td>
+                            <td>${data.RT}</td>
+                        </tr>
+                    `;
+                    $("#dataTable").html(tableContent);
+                },
+                error: function() {
+                    $("#dataTable").html("<tr><td colspan='4'>데이터를 불러오는 데 실패했습니다.</td></tr>");
+                }
+            });
+        }
+
+        // 센서 데이터는 3초마다 계속 업데이트
+        function fetchSensorData() {
+            $.ajax({
+                url: "/get_sensor_data",
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    $("#tempData").text(data.temperature);
+                    $("#humData").text(data.humidity);
+                    $("#lightData").text(data.light);
+                },
+                error: function() {
+                    $("#tempData").text("에러");
+                    $("#humData").text("에러");
+                    $("#lightData").text("에러");
+                }
+            });
+        }
+
+        fetchMySQLData();  
+        
+        // 3초마다 센서 데이터 갱신
+        setInterval(fetchSensorData, 3000);
+
+
+        
+    </script>
+
+</body>
+</html>
+
