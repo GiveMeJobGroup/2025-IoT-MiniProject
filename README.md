@@ -55,7 +55,7 @@
 - labeled_sleep.txt
     - 시간(30초 단위) / 수면 단계
 
-<img src='./image/csv_data.png' width=800>
+<img src='./image/csv_data.png' width=500>
 - sleep_data.csv
     - ID / 수면 단계(단계 변경 시 기록)
 
