@@ -55,7 +55,10 @@ for i in range(31):
 
     fullTime = 8 * 3600     # 임시 적정수면시간 8시간 * 3600 (초로 변환)
     if (sleep.loc[i, 'D+R'] == 1) and (sleep.loc[i,'FS'] == 1):
-        sleep.loc[i,'RT'] = fullTime - t
+        if (t >= fullTime):
+            sleep.loc[i,'RT'] = 0           # 8시간 이상 잔 사람은 0으로 일괄 처리
+        else:
+            sleep.loc[i,'RT'] = fullTime - t
 
 
 
