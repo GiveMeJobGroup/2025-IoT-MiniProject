@@ -5,44 +5,42 @@ import requests
 
 app = Flask(__name__, template_folder='templates')
 
-# MySQL 연결 정보
 host = 'localhost'
 database = 'sleep'
 username = 'root'
 password = '12345'
 
-# MySQL 연결
 try:
     conn = pymysql.connect(
         host=host,
         user=username,
         passwd=password,
         db=database,
-        cursorclass=pymysql.cursors.DictCursor  # 딕셔너리 형태로 결과 반환
+        cursorclass=pymysql.cursors.DictCursor  # 데이터베이스 쿼리 결과를 딕셔너리 형태로 가져오도록 설정
     )
     cursor = conn.cursor()
-    print("✅ MySQL 연결 성공!")
+    print("MySQL 연결 성공")
 
 except pymysql.MySQLError as e:
     print(f"MySQL 오류 발생: {e}")
     conn = None
 
-
-# HTML 페이지 렌더링
+# 서버 페이지에서 화면 확인
 @app.route('/')
 def index():
     return render_template('data_display.html')
 
 
-# MySQL -> 서버로 전송 // 아두이노에서 가져감
-r_idx = None  # 한 번 정한 r_idx를 유지하도록 글로벌 변수 사용
+# MySQL --> 서버로 데이터 전송
+# 아두이노에서 DR, FS, RT값 가져감
+r_idx = None 
 
 @app.route('/get_data', methods=['GET'])
-def get_fixed_random_data():
+def DB_to_server():
     global r_idx
     try:
         with conn.cursor() as cursor:
-            if r_idx is None:  # 계속 아두이노로 값 랜덤하게 보내기 방지용
+            if r_idx is None:
                 r_idx = random.randint(0, 30)
 
             sql = f"SELECT `ID`, `D+R`, `FS`, `RT` FROM sleepStage WHERE idx = {r_idx}"
@@ -51,7 +49,7 @@ def get_fixed_random_data():
             result = cursor.fetchone()
 
             if not result:
-                return jsonify({"error": "No matching data found"}), 404
+                return jsonify({"error": "해당 데이터 없음"}), 404
 
             return jsonify(result)
 
@@ -60,17 +58,17 @@ def get_fixed_random_data():
         return jsonify({"error": str(e)}), 500
 
 
-# 아두이노 -> 서버 (POST)
+# 아두이노 --> 서버
 sensor_data = {"temperature": -1, "humidity": -1, "light": -1}  # 초기값
 
 @app.route('/sensor_data', methods=['POST'])
 def receive_sensor_data():
     global sensor_data
     try:
-        data = request.get_json()  # 아두이노 한테서 JSON 데이터 받기
+        data = request.get_json()  # 아두이노한테서 센서값 JSON 데이터로 받기
 
         if not data or "sensorData" not in data:
-            return jsonify({"error": "Invalid data format"}), 400
+            return jsonify({"error": "해당 데이터 없음"}), 400
 
         receive_data = data["sensorData"].split(" ")
         
@@ -80,18 +78,18 @@ def receive_sensor_data():
             "light": float(receive_data[2]),
         }
 
-        print(" Parsed sensor data:", sensor_data)
+        print("sensor data:", sensor_data)
 
-        return jsonify({"message": "Sensor data received!", "data": sensor_data}), 200
+        return jsonify({"message": "센서 데이터 수신완료", "data": sensor_data}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# 서버에 저장된 값을 화면에 출력
+# 서버에 저장된 온습도, 조도값을 화면에 출력
 @app.route('/get_sensor_data', methods=['GET'])
-def send_sensor_data():
+def display_sensor_data():
     global sensor_data
-    return jsonify(sensor_data)  # Flask에서 저장된 센서 데이터를 반환
+    return jsonify(sensor_data)
 
 
 if __name__ == '__main__':
