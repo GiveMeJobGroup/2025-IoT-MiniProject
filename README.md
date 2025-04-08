@@ -51,11 +51,11 @@
 1. **From txt to csv 변환**
 - labeled_sleep.txt -> 31개
     - 시간(30초 단위) / 수면 단계
-    - <img src='./image/txt_data.png' width=300>
+    - <img src='./image/txt_data.png' width=250>
 
 - sleep_data.csv
     - ID / 수면 단계(단계 변경 시 기록)
-    - <img src='./image/csv_data.png' width=500>
+    - <img src='./image/csv_data.png' width=350>
 
 2. **N1, N2는 같은 단계로 취급**
     - 본 프로젝트에서는 N1과 N2 단계를 독립적으로 구분하기 보다, 이를 N3와 REM 수면 단계로 진입하는 과정으로 간주
@@ -67,7 +67,7 @@
     - **D+R**: N3와 REM 수면 시간의 합이 2시간을 넘는 경우 1, 그렇지 않으면 0으로 표시(N3와 REM 수면의 합이 전체 8시간 중 2시간 이상이면 충분하다고 가정)
     - **FS**: 6시간 이상 수면한 경우 1, 그렇지 않으면 0으로 표시(인간의 최소한의 수면 보장 시간을 6시간으로 설정)
     - **RT**: 8시간에서 D+R과 FS 충족된 시간을 제외하고 남은 수면 시간
-        - <img src='./image/add_col.png' width=300>
+        - <img src='./image/add_col.png' width=250>
 
 
 ---
@@ -75,7 +75,8 @@
 - NodeMCU(ESP8266)와 DB연결을 위해 Flask 서버를 활용
 - 아두이노에서 측정한 센서 데이터 출력
 - DB에서 읽어온 수면 데이터 출력
-    - 사진첨부
+    
+    <img src='./image/server_print.gif' width=450>
 
 ## 아두이노
 - 기능
@@ -103,6 +104,9 @@
      - ESP8266 코드 업로드하고 WIFI 정보 설정 (real_serial_esp.ino)
 
 - 데이터 흐름
+
+    <img src='./image/구조도.png' width=600>
+
      - 시스템이 부팅되면 아두이노가 센서 데이터 측정 후 ESP8266으로 전송
      - ESP 8266이 WIFI를 통해 Flask서버로 센서 데이터 업로드
      - Flask서버에서 DB를 통해 읽어온 수면 데이터 ESP8266으로 전송
@@ -127,6 +131,9 @@
         - LED OFF
         - LCD: "cool Temp"
         - 부저를 이용해 자장가 출력
+    
+    <img src='./image/상황1-2.png' width='700'>
+    <img src='./image/상황3-4.png' width='700'>
 
 - 아두이노에서 측정한 데이터(온습도, 조도) Flask 서버로 전송 (추후 앱 개발시 활용 가능)
 
