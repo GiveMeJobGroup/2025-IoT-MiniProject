@@ -61,9 +61,8 @@ for i in range(31):
             sleep.loc[i,'RT'] = fullTime - t
 
 
-
-
 # print(sleep)
 
 save_path = "csv_convert/sleep_data.csv"
-sleep.to_csv(save_path, index=False, encoding='utf-8')  # 한글 깨짐 방지
+sleep.index.name = "idx"
+sleep.to_csv(save_path, index=True, encoding='utf-8')  # 한글 깨짐 방지

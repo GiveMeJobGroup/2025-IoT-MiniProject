@@ -47,7 +47,7 @@
     </table>
 
     <script>
-        function fetchMySQLData() {
+        function getShowData() {
             $.ajax({
                 url: "/get_data",
                 type: "GET",
@@ -70,8 +70,7 @@
             });
         }
 
-        // 센서 데이터는 3초마다 계속 업데이트
-        function fetchSensorData() {
+        function getSensorData() {
             $.ajax({
                 url: "/get_sensor_data",
                 type: "GET",
@@ -89,15 +88,12 @@
             });
         }
 
-        fetchMySQLData();  
+        getShowData();  
         
-        // 3초마다 센서 데이터 갱신
-        setInterval(fetchSensorData, 3000);
-
-
+        // 3초마다 센서 데이터 업데이트
+        setInterval(getSensorData, 3000);
         
     </script>
 
 </body>
 </html>
-
