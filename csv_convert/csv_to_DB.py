@@ -10,7 +10,7 @@ username = 'root'
 password = '12345'
 
 # CSV 파일 읽기
-csv_file = "./csv_convert/sleep_data.csv"
+csv_file = "./sleep_data.csv"
 df = pd.read_csv(csv_file)
 
 # 테이블명 설정
